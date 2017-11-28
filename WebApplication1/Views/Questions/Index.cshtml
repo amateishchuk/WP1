@@ -1,0 +1,41 @@
+﻿@using System.Collections.Generic
+@using WebApplication1.Models
+
+@model List<Question>
+@{
+    ViewBag.Title = "Questions";
+}
+
+@if (Model.Any())
+{
+    <ul class="list-group">
+        @foreach (var question in Model)
+        {
+            <li class="list-group-item">
+                <a href="@Url.Action("OpenAsk", new { id = question.Id })">
+                    <div class="list-group-item-heading">
+                        @if (question.Asker != null)
+                        {
+                            @question.Asker.UserName
+                        }
+                        else
+                        {
+                            @:anonymous
+                        }
+                        <span class="pull-right">@question.DateTimeAsk.ToString("g")</span>
+                    </div>
+                    <div class="list-group-item-text">@question.Ask</div>
+                </a>
+            </li>
+        }
+    </ul>
+}
+else
+{
+    <h1>You don't have new questions.</h1>
+}
+
+
+
+
+

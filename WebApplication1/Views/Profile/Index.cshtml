@@ -1,0 +1,77 @@
+﻿@using WebApplication1.Models
+@model ProfileViewModel
+
+@{
+    ViewBag.Title = "Profile";
+}
+
+<div class="row">
+    <div class="jumbotron">
+        <h1>@Model.User.UserName</h1>
+        <p>@Model.Questions.Count answer(-s)</p>
+    </div>
+</div>
+@if (Model.AllowAskQuestions)
+{
+    using (Html.BeginForm("PostQuestion", "Profile", FormMethod.Post))
+    {
+        <div class="row">
+            <div class="col-lg-12">
+                <textarea style="resize:none" cols="4" name="text"></textarea>
+                <input type="hidden" name="responderId" value="@Model.User.Id" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <input type="submit" value="Ask question" />
+            </div>
+        </div>
+    }
+}
+<div class="row">
+    <div class="col-lg-12">
+
+    </div>
+</div>
+
+@if (Model.Questions.Any())
+{
+    <ul class="list-group">
+        @foreach (var question in Model.Questions)
+        {
+            <li class="list-group-item">
+                <div class="list-group-item-heading">
+                    @if (question.Asker != null)
+                    {
+                        @question.Asker.UserName
+                    }
+                    else
+                    {
+                        @:Anonymous
+                    }
+                    <span class="pull-right">@question.DateTimeAsk.ToString("g")</span>
+                </div>
+                <div class="list-group-item-text">@question.Ask</div>
+                <p>
+                    @question.Response <span class="pull-right">@((DateTime)question.DateTimeResponse).ToString("g")</span>
+                </p>
+            </li>
+        }
+    </ul>
+}
+else
+{
+    <h1><span>
+            @if (Model.AllowAskQuestions)
+            {
+                @:User
+            }
+            else
+            {
+                @:You
+            }
+        </span> 
+        didn't respond for anything question yet.
+    </h1>
+}
+
